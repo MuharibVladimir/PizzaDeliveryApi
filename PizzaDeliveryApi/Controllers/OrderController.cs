@@ -1,20 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PizzaDeliveryApi.Data;
 using PizzaDeliveryApi.Models;
 using PizzaDeliveryApi.Services;
 
 namespace PizzaDeliveryApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
-        public OrderController()
+        private readonly DataContext _context;
+        public OrderController(DataContext context)
         {
+            _context = context;
         }
 
         [HttpGet]
-        public ActionResult<List<Order>> GetAll() =>
-           OrderService.GetAll();
+        public async Task<ActionResult<List<Order>>> GetAll()
+        {
+            var orders = await _context.Orders.ToListAsync();
+            return Ok(orders);
+        }
 
         // GET by Id action
         [HttpGet("{id}")]

@@ -8,11 +8,11 @@ namespace PizzaDeliveryApi.Services
         static int nextId = 3;
         static OrderService()
         {
-            Orders = new List<Order>
-        {
-            new Order { Id = 1, CustomerId = 5, CourierId = 1, FoodId = 2, Status = "In progress", DeliveryDateTime = DateTime.Now, OrdeRegistrationDateTime = DateTime.Today },
-            new Order { Id = 2, CustomerId = 6, CourierId = 2, FoodId = 4, Status = "Delivered", DeliveryDateTime = DateTime.Now, OrdeRegistrationDateTime = DateTime.Today }
-        }; 
+        //    Orders = new List<Order>
+        //{
+        //    new Order { Id = 1, CustomerId = 5, /*CourierId = 1, FoodId = 2*/ Status = "In progress", DeliveryDateTime = DateTime.Now, OrdeRegistrationDateTime = DateTime.Today },
+        //    new Order { Id = 2, CustomerId = 6, CourierId = 2, FoodId = 4, Status = "Delivered", DeliveryDateTime = DateTime.Now, OrdeRegistrationDateTime = DateTime.Today }
+        //}; 
         }
 
         public static List<Order> GetAll() => Orders;

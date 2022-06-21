@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PizzaDeliveryApi.Data;
+using PizzaDeliveryApi.Interfaces;
 using PizzaDeliveryApi.Models;
 using PizzaDeliveryApi.Services;
 
@@ -8,65 +11,69 @@ namespace PizzaDeliveryApi.Controllers
     [Route("[controller]")]
     public class CustomerController : ControllerBase
     {
-        public CustomerController()
+        private readonly DataContext _context;
+        private readonly ICustomerRepository _customers;
+
+        public CustomerController(ICustomerRepository customers)
         {
+            _customers = customers;
         }
 
         /// <summary>
-        /// Return all pizza instanses
+        /// Return all customer instanses
         /// </summary>
         /// <returns></returns>
         // GET all action
         [HttpGet]
-        public ActionResult<List<Customer>> GetAll() =>
-            CustomerService.GetAll();
+        public async Task<ActionResult<List<Customer>>> GetAll()
+        {
+            return Ok(await _customers.GetAllCustomersAsync());
+        }
+            
 
         // GET by Id action
         [HttpGet("{id}")]
-        public ActionResult<Customer> Get(int id)
+        public async Task<ActionResult<Customer>> Get(int id)
         {
-            var customer = CustomerService.Get(id);
-
-            if (customer == null)
-                return NotFound();
-
-            return customer;
+            return Ok(await _customers.GetCustomerByIdAsync(id));
         }
 
         // POST action
         [HttpPost]
-        public IActionResult Create(Customer customer)
+        public  async Task<IActionResult> Create([FromBody] Customer customer)
         {
-            CustomerService.Add(customer);
-            return CreatedAtAction(nameof(Create), new { id = customer.Id }, customer);
+            return Ok(await _customers.CreateCustomerAsync(customer));
         }
 
         // PUT action
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Customer customer)
+        public async Task<IActionResult> Edit(int id, [FromBody] Customer customer)
         {
             if (id != customer.Id)
-                return BadRequest();
+                return BadRequest("What's wrong with it?");
 
-            var existingCustomer = CustomerService.Get(id);
+
+            var existingCustomer = await _context.Customers.FindAsync(id);
             if (existingCustomer is null)
                 return NotFound();
 
-            CustomerService.Update(customer);
+            _context.Customers.Update(customer);
+            _context.SaveChanges();
 
             return NoContent();
         }
 
         // DELETE action
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var customer = CustomerService.Get(id);
+            var customer = await _context.Customers.FindAsync(id);
 
             if (customer is null)
                 return NotFound();
 
-            CustomerService.Delete(id);
+            _context.Customers.Remove(customer);
+            _context.SaveChanges(); 
 
             return NoContent();
         }

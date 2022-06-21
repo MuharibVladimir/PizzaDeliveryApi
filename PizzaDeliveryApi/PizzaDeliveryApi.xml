@@ -6,7 +6,7 @@
     <members>
         <member name="M:PizzaDeliveryApi.Controllers.CustomerController.GetAll">
             <summary>
-            Return all pizza instanses
+            Return all customer instanses
             </summary>
             <returns></returns>
         </member>
