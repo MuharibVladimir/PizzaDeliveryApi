@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PizzaDeliveryApi.Data;
 
@@ -11,9 +12,10 @@ using PizzaDeliveryApi.Data;
 namespace PizzaDeliveryApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220623121937_AllRealtions")]
+    partial class AllRealtions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,10 +93,10 @@ namespace PizzaDeliveryApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AddressId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int>("DeliveryAddressId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DeliveryEdgeDateTime")
@@ -114,14 +116,6 @@ namespace PizzaDeliveryApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("PaymentTypeId");
-
-                    b.HasIndex("StatusId");
-
                     b.ToTable("Orders");
                 });
 
@@ -132,9 +126,6 @@ namespace PizzaDeliveryApi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
 
                     b.Property<int>("OrederId")
                         .HasColumnType("int");
@@ -149,10 +140,6 @@ namespace PizzaDeliveryApi.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderProducts");
                 });
@@ -240,85 +227,6 @@ namespace PizzaDeliveryApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Street");
-                });
-
-            modelBuilder.Entity("PizzaDeliveryApi.Data.Models.Order", b =>
-                {
-                    b.HasOne("PizzaDeliveryApi.Data.Models.Address", "Address")
-                        .WithMany("Orders")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PizzaDeliveryApi.Data.Models.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PizzaDeliveryApi.Data.Models.PaymentType", "PaymentType")
-                        .WithMany("Orders")
-                        .HasForeignKey("PaymentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PizzaDeliveryApi.Data.Models.Status", "Status")
-                        .WithMany("Orders")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("PaymentType");
-
-                    b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("PizzaDeliveryApi.Data.Models.OrderProduct", b =>
-                {
-                    b.HasOne("PizzaDeliveryApi.Data.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PizzaDeliveryApi.Data.Models.Product", "Product")
-                        .WithMany("OrderProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("PizzaDeliveryApi.Data.Models.Address", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("PizzaDeliveryApi.Data.Models.Customer", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("PizzaDeliveryApi.Data.Models.PaymentType", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("PizzaDeliveryApi.Data.Models.Product", b =>
-                {
-                    b.Navigation("OrderProducts");
-                });
-
-            modelBuilder.Entity("PizzaDeliveryApi.Data.Models.Status", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("PizzaDeliveryApi.Data.Models.Street", b =>
