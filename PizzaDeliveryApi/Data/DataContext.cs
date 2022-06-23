@@ -15,6 +15,7 @@ namespace PizzaDeliveryApi.Data
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<Product> Products { get; set; }  
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<Street> Streets { get; set; }
         public DbSet<PaymentType> PaymentTypes { get; set; }    
         public DbSet<Status> Statuses { get; set; } 
         
