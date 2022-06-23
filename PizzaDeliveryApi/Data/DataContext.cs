@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PizzaDeliveryApi.Models;
+using PizzaDeliveryApi.Data.Models;
 
 namespace PizzaDeliveryApi.Data
 {
@@ -12,5 +12,11 @@ namespace PizzaDeliveryApi.Data
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+        public DbSet<Product> Products { get; set; }  
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<PaymentType> PaymentTypes { get; set; }    
+        public DbSet<Status> Statuses { get; set; } 
+        
     }
 }

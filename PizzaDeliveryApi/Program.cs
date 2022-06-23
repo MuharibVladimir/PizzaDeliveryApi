@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-using PizzaDeliveryApi.Models;
+using PizzaDeliveryApi.Data.Models;
 using System.Reflection;
 using PizzaDeliveryApi.Data;
 using PizzaDeliveryApi.Interfaces;

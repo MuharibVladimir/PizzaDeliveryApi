@@ -1,4 +1,4 @@
-﻿using PizzaDeliveryApi.Models;
+﻿using PizzaDeliveryApi.Data.Models;
 
 namespace PizzaDeliveryApi.Interfaces
 {
@@ -7,7 +7,7 @@ namespace PizzaDeliveryApi.Interfaces
         Task<List<Customer>> GetAllCustomersAsync();
         Task<Customer> GetCustomerByIdAsync(int id);  
         Task<Customer> CreateCustomerAsync(Customer customer);
-        //Task<Customer> EditCustomerByIdAsync(int id, Customer customer);
-        //Task<Customer> DeleteCustomerByIdAsync(int id);
+        //Task<Customer> EditCustomerByIdAsync(Customer customer);
+        //Task DeleteCustomerByIdAsync(int id);
     }
 }

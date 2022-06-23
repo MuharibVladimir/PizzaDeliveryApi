@@ -10,17 +10,5 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:PizzaDeliveryApi.Controllers.DrinkController.GetAll">
-            <summary>
-            Return all pizza instanses
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:PizzaDeliveryApi.Controllers.PizzaController.GetAll">
-            <summary>
-            Return all pizza instanses
-            </summary>
-            <returns></returns>
-        </member>
     </members>
 </doc>

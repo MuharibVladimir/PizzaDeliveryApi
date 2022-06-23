@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PizzaDeliveryApi.Interfaces;
-using PizzaDeliveryApi.Models;
+using PizzaDeliveryApi.Data.Models;
 
 namespace PizzaDeliveryApi.Data.Repositories
 {

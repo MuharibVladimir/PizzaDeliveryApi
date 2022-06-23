@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PizzaDeliveryApi.Data;
-using PizzaDeliveryApi.Models;
+using PizzaDeliveryApi.Data.Models;
 using PizzaDeliveryApi.Services;
 
 namespace PizzaDeliveryApi.Controllers
@@ -23,48 +23,48 @@ namespace PizzaDeliveryApi.Controllers
             return Ok(orders);
         }
 
-        // GET by Id action
-        [HttpGet("{id}")]
-        public ActionResult<Order> Get(int id)
-        {
-            var order = OrderService.Get(id);
+        //// GET by Id action
+        //[HttpGet("{id}")]
+        //public ActionResult<Order> Get(int id)
+        //{
+        //    var order = OrderService.Get(id);
 
-            if (order == null)
-                return NotFound();
+        //    if (order == null)
+        //        return NotFound();
 
-            return order;
-        }
+        //    return order;
+        //}
 
        
 
-        // PUT action
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, Order order)
-        {
-            if (id != order.Id)
-                return BadRequest();
+        //// PUT action
+        //[HttpPut("{id}")]
+        //public IActionResult Update(int id, Order order)
+        //{
+        //    if (id != order.Id)
+        //        return BadRequest();
 
-            var existingOrder = OrderService.Get(id);
-            if (existingOrder is null)
-                return NotFound();
+        //    var existingOrder = OrderService.Get(id);
+        //    if (existingOrder is null)
+        //        return NotFound();
 
-            OrderService.Update(order);
+        //    OrderService.Update(order);
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
-        // DELETE action
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            var order = OrderService.Get(id);
+        //// DELETE action
+        //[HttpDelete("{id}")]
+        //public IActionResult Delete(int id)
+        //{
+        //    var order = OrderService.Get(id);
 
-            if (order is null)
-                return NotFound();
+        //    if (order is null)
+        //        return NotFound();
 
-            OrderService.Delete(id);
+        //    OrderService.Delete(id);
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
     }
 }

@@ -2,21 +2,22 @@
 using Microsoft.EntityFrameworkCore;
 using PizzaDeliveryApi.Data;
 using PizzaDeliveryApi.Interfaces;
-using PizzaDeliveryApi.Models;
+using PizzaDeliveryApi.Data.Models;
 using PizzaDeliveryApi.Services;
 
 namespace PizzaDeliveryApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
         private readonly DataContext _context;
         private readonly ICustomerRepository _customers;
 
-        public CustomerController(ICustomerRepository customers)
+        public CustomerController(ICustomerRepository customers, DataContext context)
         {
             _customers = customers;
+            _context = context;
         }
 
         /// <summary>
@@ -46,19 +47,20 @@ namespace PizzaDeliveryApi.Controllers
         }
 
         // PUT action
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] Customer customer)
+        [HttpPut]
+        public /*async*/ /*Task<*/IActionResult/*>*/ Edit(Customer customer)
         {
-            if (id != customer.Id)
-                return BadRequest("What's wrong with it?");
+            //if (id != customer.Id)
+            //    return BadRequest("What's wrong with it?");
 
-
-            var existingCustomer = await _context.Customers.FindAsync(id);
-            if (existingCustomer is null)
-                return NotFound();
-
-            _context.Customers.Update(customer);
+            _context.Entry(customer).State = EntityState.Modified;
             _context.SaveChanges();
+            //var existingCustomer = await _context.Customers.FindAsync(customer.Id);
+            //if (existingCustomer is null)
+            //    return NotFound();
+
+            //_context.Customers.Update(customer);
+            
 
             return NoContent();
         }
