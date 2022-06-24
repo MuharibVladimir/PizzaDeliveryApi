@@ -1,11 +1,34 @@
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-using PizzaDeliveryApi.Models;
+using PizzaDeliveryApi.Data.Models;
 using System.Reflection;
+using PizzaDeliveryApi.Data;
+using PizzaDeliveryApi.Data.Repositories;
+using PizzaDeliveryApi.Data.Interfaces;
+using PizzaDeliveryApi.Services.Interfaces;
+using PizzaDeliveryApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddDbContext<DataContext>(
+    options =>
+{ 
+    options.UseLazyLoadingProxies()
+    .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); 
+});
+
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderProductRepository, OrderProductRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
+builder.Services.AddScoped<IStatusRepository, StatusRepository>();
+builder.Services.AddScoped<IStreetRepository, StreetRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
 
 builder.Services.AddControllers();
 //builder.Services.AddSwaggerGen(c =>

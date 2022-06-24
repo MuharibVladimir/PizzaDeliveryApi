@@ -1,62 +1,69 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PizzaDeliveryApi.Models;
+using Microsoft.EntityFrameworkCore;
+using PizzaDeliveryApi.Data;
+using PizzaDeliveryApi.Data.Interfaces;
+using PizzaDeliveryApi.Data.Models;
 using PizzaDeliveryApi.Services;
+using PizzaDeliveryApi.Services.Interfaces;
+using PizzaDeliveryApi.Data.DTOModels;
 
 namespace PizzaDeliveryApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
-        public OrderController()
+        private readonly DataContext _context;
+        private readonly IOrderRepository _orders;
+        private readonly IOrderService _services;
+
+        public OrderController(IOrderRepository orders, DataContext context, IOrderService services)
         {
+            _orders = orders;
+            _context = context;
+            _services = services;
         }
 
+        /// <summary>
+        /// Return all customer instanses
+        /// </summary>
+        /// <returns></returns>
+        // GET all action
         [HttpGet]
-        public ActionResult<List<Order>> GetAll() =>
-           OrderService.GetAll();
+        public async Task<ActionResult<List<Order>>> GetAll()
+        {
+            return Ok(await _orders.GetAllOrdersAsync());
+        }
+
 
         // GET by Id action
         [HttpGet("{id}")]
-        public ActionResult<Order> Get(int id)
+        public async Task<ActionResult<Order>> Get(int id)
         {
-            var order = OrderService.Get(id);
-
-            if (order == null)
-                return NotFound();
-
-            return order;
+            return Ok(await _orders.GetOrderByIdAsync(id));
         }
 
-       
+        // POST action
+        [HttpPost]
+        public async Task<IActionResult> Create(OrderDTO order)
+        {
+            await _services.MakeOrder(order);
+            return Ok();
+        }
 
         // PUT action
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, Order order)
+        [HttpPut]
+        public async Task<IActionResult> Edit(int id, [FromBody] Order customer)
         {
-            if (id != order.Id)
-                return BadRequest();
+            return Ok(await _orders.EditOrderByIdAsync(id, customer));
 
-            var existingOrder = OrderService.Get(id);
-            if (existingOrder is null)
-                return NotFound();
-
-            OrderService.Update(order);
-
-            return NoContent();
         }
 
         // DELETE action
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var order = OrderService.Get(id);
-
-            if (order is null)
-                return NotFound();
-
-            OrderService.Delete(id);
-
+            await _services.DeleteOrderByIdAsync(id);
             return NoContent();
         }
     }
