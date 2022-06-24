@@ -1,47 +1,71 @@
-﻿using PizzaDeliveryApi.Data.Models;
+﻿using PizzaDeliveryApi.Data;
+using PizzaDeliveryApi.Data.DTOModels;
+using PizzaDeliveryApi.Data.Interfaces;
+using PizzaDeliveryApi.Data.Models;
+using PizzaDeliveryApi.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace PizzaDeliveryApi.Services
 {
-    public class OrderService
+    public class OrderService: IOrderService
     {
-    //    static List<Order> Orders { get; }
-    //    static int nextId = 3;
-    //    static OrderService()
-    //    {
-    //    //    Orders = new List<Order>
-    //    //{
-    //    //    new Order { Id = 1, CustomerId = 5, /*CourierId = 1, FoodId = 2*/ Status = "In progress", DeliveryDateTime = DateTime.Now, OrdeRegistrationDateTime = DateTime.Today },
-    //    //    new Order { Id = 2, CustomerId = 6, CourierId = 2, FoodId = 4, Status = "Delivered", DeliveryDateTime = DateTime.Now, OrdeRegistrationDateTime = DateTime.Today }
-    //    //}; 
-    //    }
+        private readonly ICustomerRepository _customers;
+        private readonly IAddressRepository _addresses;
+        private readonly IStatusRepository _statuses;
+        private readonly IPaymentTypeRepository _payments;
+        private readonly IOrderRepository _orders;
+        private readonly DataContext _context;
+        public OrderService(IOrderRepository orders, ICustomerRepository customers, IAddressRepository addresses, IStatusRepository statuses,
+            IPaymentTypeRepository payments, DataContext context)
+        {
+            _orders = orders;    
+            _customers = customers;
+            _addresses = addresses; 
+            _statuses = statuses;   
+            _payments = payments;   
+            _context = context; 
+        }
 
-    //    public static List<Order> GetAll() => Orders;
+        public async Task MakeOrder(OrderDTO orderDto)
+        {
+            Customer customer = await _customers.GetCustomerByIdAsync(orderDto.CustomerId);
+            Address address = await _addresses.GetAddressByIdAsync(orderDto.AddressId);
+            PaymentType paymentType = await _payments.GetPaymentTypeByIdAsync(orderDto.PaymentTypeId);
+            Status status = await _statuses.GetStatusByIdAsync(orderDto.StatusId);
 
-    //    public static Order? Get(int id) => Orders.FirstOrDefault(p => p.Id == id);
+            // валидация
+            if (customer == null)
+                throw new ValidationException("Customer is not found");
 
-    //    public static void Add(Order order)
-    //    {
-    //        order.Id = nextId++;
-    //        Orders.Add(order);
-    //    }
+            Order order = new Order
+            {
+                OrderRegistrationDateTime = orderDto.DeliveryEdgeDateTime,
+                DeliveryEdgeDateTime = orderDto.DeliveryEdgeDateTime,
+                Customer = customer,
+                Status = status,
+                PaymentType = paymentType,
+                Address = address,
+                TotalPrice = orderDto.TotalPrice,
+                PaymentTypeId = orderDto.PaymentTypeId,
+                AddressId = orderDto.AddressId, 
+                StatusId = orderDto.StatusId,
+                CustomerId = orderDto.CustomerId
+            };
 
-    //    public static void Delete(int id)
-    //    {
-    //        var order = Get(id);
-    //        if (order is null)
-    //            return;
+                await _orders.CreateOrderAsync(order);
+                await _context.SaveChangesAsync();
 
-    //        Orders.Remove(order);
-    //    }
 
-    //    public static void Update(Order order)
-    //    {
-    //        var index = Orders.FindIndex(p => p.Id == order.Id);
-    //        if (index == -1)
-    //            return;
+     
+          
+        }
 
-    //        Orders[index] = order;
-    //    }
+        public async Task DeleteOrderByIdAsync(int id)
+        {
+
+           await  _orders.DeleteOrderByIdAsync(id);
+        }
+
     }
 }
 

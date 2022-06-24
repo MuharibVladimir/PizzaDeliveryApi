@@ -1,4 +1,7 @@
-﻿namespace PizzaDeliveryApi.Data.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
+namespace PizzaDeliveryApi.Data.Models
 {
     public class Customer
     {
@@ -8,9 +11,8 @@
         public string PhoneNumber { get; set; } = null!;
         public string? EmailAddress { get; set; }
 
+        //[JsonIgnore]
         public virtual List<Order>? Orders { get; set; }
-
-        //public ICollection<Order> Orders { get; set; } = null!;
 
     }
 }

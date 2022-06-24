@@ -10,5 +10,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:PizzaDeliveryApi.Controllers.OrderController.GetAll">
+            <summary>
+            Return all customer instanses
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

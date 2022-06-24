@@ -2,7 +2,7 @@
 
 namespace PizzaDeliveryApi.Services
 {
-    public class PizzaService
+    public class ProductService
     {
     //    static List<Product> Pizzas { get; }
     //    static int nextId = 3;

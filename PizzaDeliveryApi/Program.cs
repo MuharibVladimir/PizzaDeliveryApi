@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using PizzaDeliveryApi.Data.Models;
 using System.Reflection;
 using PizzaDeliveryApi.Data;
-using PizzaDeliveryApi.Interfaces;
 using PizzaDeliveryApi.Data.Repositories;
+using PizzaDeliveryApi.Data.Interfaces;
+using PizzaDeliveryApi.Services.Interfaces;
+using PizzaDeliveryApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,16 @@ builder.Services.AddDbContext<DataContext>(
 });
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderProductRepository, OrderProductRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
+builder.Services.AddScoped<IStatusRepository, StatusRepository>();
+builder.Services.AddScoped<IStreetRepository, StreetRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+
 builder.Services.AddControllers();
 //builder.Services.AddSwaggerGen(c =>
 //{

@@ -1,4 +1,6 @@
-﻿namespace PizzaDeliveryApi.Data.Models
+﻿using System.Text.Json.Serialization;
+
+namespace PizzaDeliveryApi.Data.Models
 {
     public class Address
     {
@@ -9,7 +11,9 @@
         public int? Entrance { get; set; }
         public int? Floor { get; set; }
         public int StreetId { get; set; }
-        public virtual Street Street { get; set; } 
+
+        [JsonIgnore]
+        public virtual Street Street { get; set; }
         public virtual List<Order>? Orders { get; set; }
     }
 }

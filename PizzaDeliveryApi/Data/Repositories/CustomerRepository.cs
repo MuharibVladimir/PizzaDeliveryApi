@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PizzaDeliveryApi.Interfaces;
+using PizzaDeliveryApi.Data.Interfaces;
 using PizzaDeliveryApi.Data.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PizzaDeliveryApi.Data.Repositories
 {
@@ -28,7 +29,28 @@ namespace PizzaDeliveryApi.Data.Repositories
 
         public async Task<Customer> GetCustomerByIdAsync(int id)
         {
-            return await _context.Customers.FirstOrDefaultAsync(customer => customer.Id == id);
+            var customer = await _context.Customers.FirstOrDefaultAsync(customer => customer.Id == id);
+
+            return customer;
+        }
+
+        public async Task<Customer> EditCustomerByIdAsync(int id, Customer customer)
+        {
+            _context.Entry(customer).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return customer;
+        }
+
+        public async Task DeleteCustomerByIdAsync(int id)
+        {
+            var customer = await _context.Customers.FindAsync(id);
+
+            if (customer != null)
+            {
+                _context.Customers.Remove(customer);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

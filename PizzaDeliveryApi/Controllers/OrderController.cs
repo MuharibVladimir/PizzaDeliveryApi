@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PizzaDeliveryApi.Data;
+using PizzaDeliveryApi.Data.Interfaces;
 using PizzaDeliveryApi.Data.Models;
 using PizzaDeliveryApi.Services;
+using PizzaDeliveryApi.Services.Interfaces;
+using PizzaDeliveryApi.Data.DTOModels;
 
 namespace PizzaDeliveryApi.Controllers
 {
@@ -11,60 +14,57 @@ namespace PizzaDeliveryApi.Controllers
     public class OrderController : ControllerBase
     {
         private readonly DataContext _context;
-        public OrderController(DataContext context)
+        private readonly IOrderRepository _orders;
+        private readonly IOrderService _services;
+
+        public OrderController(IOrderRepository orders, DataContext context, IOrderService services)
         {
+            _orders = orders;
             _context = context;
+            _services = services;
         }
 
+        /// <summary>
+        /// Return all customer instanses
+        /// </summary>
+        /// <returns></returns>
+        // GET all action
         [HttpGet]
         public async Task<ActionResult<List<Order>>> GetAll()
         {
-            var orders = await _context.Orders.ToListAsync();
-            return Ok(orders);
+            return Ok(await _orders.GetAllOrdersAsync());
         }
 
-        //// GET by Id action
-        //[HttpGet("{id}")]
-        //public ActionResult<Order> Get(int id)
-        //{
-        //    var order = OrderService.Get(id);
 
-        //    if (order == null)
-        //        return NotFound();
+        // GET by Id action
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Order>> Get(int id)
+        {
+            return Ok(await _orders.GetOrderByIdAsync(id));
+        }
 
-        //    return order;
-        //}
+        // POST action
+        [HttpPost]
+        public async Task<IActionResult> Create(OrderDTO order)
+        {
+            await _services.MakeOrder(order);
+            return Ok();
+        }
 
-       
+        // PUT action
+        [HttpPut]
+        public async Task<IActionResult> Edit(int id, [FromBody] Order customer)
+        {
+            return Ok(await _orders.EditOrderByIdAsync(id, customer));
 
-        //// PUT action
-        //[HttpPut("{id}")]
-        //public IActionResult Update(int id, Order order)
-        //{
-        //    if (id != order.Id)
-        //        return BadRequest();
+        }
 
-        //    var existingOrder = OrderService.Get(id);
-        //    if (existingOrder is null)
-        //        return NotFound();
-
-        //    OrderService.Update(order);
-
-        //    return NoContent();
-        //}
-
-        //// DELETE action
-        //[HttpDelete("{id}")]
-        //public IActionResult Delete(int id)
-        //{
-        //    var order = OrderService.Get(id);
-
-        //    if (order is null)
-        //        return NotFound();
-
-        //    OrderService.Delete(id);
-
-        //    return NoContent();
-        //}
+        // DELETE action
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _services.DeleteOrderByIdAsync(id);
+            return NoContent();
+        }
     }
 }
