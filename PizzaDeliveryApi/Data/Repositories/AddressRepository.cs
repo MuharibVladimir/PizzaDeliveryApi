@@ -41,11 +41,8 @@ namespace PizzaDeliveryApi.Data.Repositories
             return address;
         }
 
-        public async Task DeleteAddressByIdAsync(int id)
-        {
-            var address = await _context.Addresses.FindAsync(id);
-
-            if (address != null)
+        public async Task DeleteAddressByIdAsync(Address address)
+        { 
             {
                 _context.Addresses.Remove(address);
                 await _context.SaveChangesAsync();

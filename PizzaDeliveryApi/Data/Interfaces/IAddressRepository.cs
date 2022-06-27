@@ -9,6 +9,6 @@ namespace PizzaDeliveryApi.Data.Interfaces
         Task<Address> CreateAddressAsync(Address address);
 
         Task<Address> EditAddressByIdAsync(int id, Address address);
-        Task DeleteAddressByIdAsync(int id);
+        Task DeleteAddressByIdAsync(Address address);
     }
 }

@@ -9,6 +9,6 @@ namespace PizzaDeliveryApi.Data.Interfaces
         Task<Order> CreateOrderAsync(Order order);
 
         Task<Order> EditOrderByIdAsync(int id, Order order);
-        Task DeleteOrderByIdAsync(int id);
+        Task DeleteOrderByIdAsync(Order order);
     }
 }
