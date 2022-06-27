@@ -12,6 +12,7 @@ namespace PizzaDeliveryApi.Data.Models
         public string? EmailAddress { get; set; }
 
         //[JsonIgnore]
+        //[NotMapped]
         public virtual List<Order>? Orders { get; set; }
 
     }

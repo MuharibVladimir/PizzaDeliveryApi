@@ -22,6 +22,8 @@ namespace PizzaDeliveryApi.Data.Models
         [JsonIgnore]
         public virtual Address Address { get; set; }
 
+        public virtual List<OrderProduct> OrderProducts { get; set; }
+
         [Column(TypeName = "decimal(6,2)")]
         public decimal TotalPrice { get; set; }
         public DateTime? DeliveryEdgeDateTime { get; set; }

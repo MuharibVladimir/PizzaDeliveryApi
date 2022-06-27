@@ -1,10 +1,17 @@
 ﻿using PizzaDeliveryApi.Data.DTOModels;
+using PizzaDeliveryApi.Data.Interfaces;
+using PizzaDeliveryApi.Data.Models;
 
 namespace PizzaDeliveryApi.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task MakeOrder(OrderDTO orderDto);
+        Task<Order> MakeOrderAsync(OrderDTO orderDto);
+
+        Task<List<Order>> GetAllOrdersAsync();
+        Task<Order> GetOrderByIdAsync(int id);
+
+        Task<Order> EditOrderByIdAsync(int id, OrderDTO order);
         Task DeleteOrderByIdAsync(int id);
     }
 }

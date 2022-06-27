@@ -32,7 +32,7 @@ namespace PizzaDeliveryApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Order>>> GetAll()
         {
-            return Ok(await _orders.GetAllOrdersAsync());
+            return Ok(await _services.GetAllOrdersAsync());
         }
 
 
@@ -40,22 +40,22 @@ namespace PizzaDeliveryApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> Get(int id)
         {
-            return Ok(await _orders.GetOrderByIdAsync(id));
+            return Ok(await _services.GetOrderByIdAsync(id));
         }
 
         // POST action
         [HttpPost]
         public async Task<IActionResult> Create(OrderDTO order)
         {
-            await _services.MakeOrder(order);
+            await _services.MakeOrderAsync(order);
             return Ok();
         }
 
         // PUT action
         [HttpPut]
-        public async Task<IActionResult> Edit(int id, [FromBody] Order customer)
+        public async Task<IActionResult> Edit(int id, OrderDTO order)
         {
-            return Ok(await _orders.EditOrderByIdAsync(id, customer));
+            return Ok(await _services.EditOrderByIdAsync(id, order));
 
         }
 

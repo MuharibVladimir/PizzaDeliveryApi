@@ -29,7 +29,7 @@ builder.Services.AddScoped<IStreetRepository, StreetRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
-
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();
 //builder.Services.AddSwaggerGen(c =>
 //{
