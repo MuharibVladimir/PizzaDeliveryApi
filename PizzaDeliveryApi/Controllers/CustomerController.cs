@@ -11,13 +11,11 @@ namespace PizzaDeliveryApi.Controllers
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
-        private readonly DataContext _context;
         private readonly ICustomerRepository _customers;
 
-        public CustomerController(ICustomerRepository customers, DataContext context)
+        public CustomerController(ICustomerRepository customers)
         {
             _customers = customers;
-            _context = context;
         }
 
         /// <summary>
@@ -41,14 +39,14 @@ namespace PizzaDeliveryApi.Controllers
 
         // POST action
         [HttpPost]
-        public  async Task<IActionResult> Create([FromBody] Customer customer)
+        public  async Task<IActionResult> Create(Customer customer)
         {
             return Ok(await _customers.CreateCustomerAsync(customer));
         }
 
         // PUT action
         [HttpPut]
-        public async Task<IActionResult> Edit(int id, [FromBody] Customer customer)
+        public async Task<IActionResult> Edit(int id, Customer customer)
         {
             return Ok(await _customers.EditCustomerByIdAsync(id,customer));
 

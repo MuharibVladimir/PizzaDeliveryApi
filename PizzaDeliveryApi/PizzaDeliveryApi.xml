@@ -4,6 +4,12 @@
         <name>PizzaDeliveryApi</name>
     </assembly>
     <members>
+        <member name="M:PizzaDeliveryApi.Controllers.AddressController.GetAll">
+            <summary>
+            Return all customer instanses
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:PizzaDeliveryApi.Controllers.CustomerController.GetAll">
             <summary>
             Return all customer instanses
@@ -11,6 +17,42 @@
             <returns></returns>
         </member>
         <member name="M:PizzaDeliveryApi.Controllers.OrderController.GetAll">
+            <summary>
+            Return all order instanses
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PizzaDeliveryApi.Controllers.OrderController.Get(System.Int32)">
+            <summary>
+            Return certain order instanse by id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PizzaDeliveryApi.Controllers.OrderController.Create(PizzaDeliveryApi.Data.DTOModels.OrderDTO)">
+            <summary>
+            Create new order instanse
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PizzaDeliveryApi.Controllers.OrderController.Edit(System.Int32,PizzaDeliveryApi.Data.DTOModels.OrderDTO)">
+            <summary>
+            Edit certain order instanse by id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PizzaDeliveryApi.Controllers.OrderController.Delete(System.Int32)">
+            <summary>
+            Delete certain order instanse by id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PizzaDeliveryApi.Controllers.OrderProductController.GetAll">
+            <summary>
+            Return all customer instanses
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PizzaDeliveryApi.Controllers.ProductController.GetAll">
             <summary>
             Return all customer instanses
             </summary>

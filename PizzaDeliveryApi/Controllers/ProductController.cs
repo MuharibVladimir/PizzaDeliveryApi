@@ -1,6 +1,7 @@
 ﻿using PizzaDeliveryApi.Data.Models;
 using PizzaDeliveryApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using PizzaDeliveryApi.Data.Interfaces;
 
 namespace PizzaDeliveryApi.Controllers
 {
@@ -8,68 +9,52 @@ namespace PizzaDeliveryApi.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        public ProductController()
+        private readonly IProductRepository _products;
+
+        public ProductController(IProductRepository products)
         {
+            _products = products;
+        }
+        /// <summary>
+        /// Return all customer instanses
+        /// </summary>
+        /// <returns></returns>
+        // GET all action
+        [HttpGet]
+        public async Task<ActionResult<List<Customer>>> GetAll()
+        {
+            return Ok(await _products.GetAllProductsAsync());
         }
 
-        ///// <summary>
-        ///// Return all pizza instanses
-        ///// </summary>
-        ///// <returns></returns>
-        //// GET all action
-        //[HttpGet]
-        //public ActionResult<List<Product>> GetAll() =>
-        //    PizzaService.GetAll();
 
-        //// GET by Id action
-        //[HttpGet("{id}")]
-        //public ActionResult<Product> Get(int id)
-        //{
-        //    var pizza = PizzaService.Get(id);
+        // GET by Id action
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Customer>> Get(int id)
+        {
+            return Ok(await _products.GetProductByIdAsync(id));
+        }
 
-        //    if (pizza == null)
-        //        return NotFound();
+        // POST action
+        [HttpPost]
+        public async Task<IActionResult> Create(Product product)
+        {
+            return Ok(await _products.CreateProductAsync(product));
+        }
 
-        //    return pizza;
-        //}
+        // PUT action
+        [HttpPut]
+        public async Task<IActionResult> Edit(int id, Product product)
+        {
+            return Ok(await _products.EditProductByIdAsync(id, product));
 
-        //// POST action
-        //[HttpPost]
-        //public IActionResult Create(Product pizza)
-        //{
-        //    PizzaService.Add(pizza);
-        //    return CreatedAtAction(nameof(Create), new { id = pizza.Id }, pizza);
-        //}
+        }
 
-        //// PUT action
-        //[HttpPut("{id}")]
-        //public IActionResult Update(int id, Product pizza)
-        //{
-        //    if (id != pizza.Id)
-        //        return BadRequest();
-
-        //    var existingPizza = PizzaService.Get(id);
-        //    if (existingPizza is null)
-        //        return NotFound();
-
-        //    PizzaService.Update(pizza);
-
-        //    return NoContent();
-        //}
-
-        //// DELETE action
-        //[HttpDelete("{id}")]
-        //public IActionResult Delete(int id)
-        //{
-        //    var pizza = PizzaService.Get(id);
-
-        //    if (pizza is null)
-        //        return NotFound();
-
-        //    PizzaService.Delete(id);
-
-        //    return NoContent();
-        //}
-
+        // DELETE action
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _products.DeleteProductByIdAsync(id);
+            return NoContent();
+        }
     }
 }

@@ -10,22 +10,13 @@ namespace PizzaDeliveryApi.Services
 {
     public class OrderService: IOrderService
     {
-        private readonly ICustomerRepository _customers;
-        private readonly IAddressRepository _addresses;
-        private readonly IStatusRepository _statuses;
-        private readonly IPaymentTypeRepository _payments;
         private readonly IOrderRepository _orders;
         private readonly IMapper _mapper;
         private readonly DataContext _context;
 
-        public OrderService(IOrderRepository orders, ICustomerRepository customers, IAddressRepository addresses, IStatusRepository statuses,
-            IPaymentTypeRepository payments, DataContext context, IMapper mapper)
+        public OrderService(IOrderRepository orders, DataContext context, IMapper mapper)
         {
             _orders = orders;    
-            _customers = customers;
-            _addresses = addresses; 
-            _statuses = statuses;   
-            _payments = payments;   
             _context = context;
             _mapper = mapper;
         }
@@ -58,6 +49,7 @@ namespace PizzaDeliveryApi.Services
         {
             return await _orders.GetAllOrdersAsync();
         }
+
         public async Task<Order> GetOrderByIdAsync(int id)
         {
             return await _orders.GetOrderByIdAsync(id); 

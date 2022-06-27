@@ -25,7 +25,7 @@ namespace PizzaDeliveryApi.Controllers
         }
 
         /// <summary>
-        /// Return all customer instanses
+        /// Return all order instanses
         /// </summary>
         /// <returns></returns>
         // GET all action
@@ -35,7 +35,10 @@ namespace PizzaDeliveryApi.Controllers
             return Ok(await _services.GetAllOrdersAsync());
         }
 
-
+        /// <summary>
+        /// Return certain order instanse by id
+        /// </summary>
+        /// <returns></returns>
         // GET by Id action
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> Get(int id)
@@ -43,6 +46,10 @@ namespace PizzaDeliveryApi.Controllers
             return Ok(await _services.GetOrderByIdAsync(id));
         }
 
+        /// <summary>
+        /// Create new order instanse
+        /// </summary>
+        /// <returns></returns>
         // POST action
         [HttpPost]
         public async Task<IActionResult> Create(OrderDTO order)
@@ -51,6 +58,10 @@ namespace PizzaDeliveryApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Edit certain order instanse by id
+        /// </summary>
+        /// <returns></returns>
         // PUT action
         [HttpPut]
         public async Task<IActionResult> Edit(int id, OrderDTO order)
@@ -59,6 +70,10 @@ namespace PizzaDeliveryApi.Controllers
 
         }
 
+        /// <summary>
+        /// Delete certain order instanse by id
+        /// </summary>
+        /// <returns></returns>
         // DELETE action
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

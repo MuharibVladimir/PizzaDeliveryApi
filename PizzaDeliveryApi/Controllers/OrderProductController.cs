@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PizzaDeliveryApi.Data.Interfaces;
 using PizzaDeliveryApi.Data.Models;
 using PizzaDeliveryApi.Services;
 
@@ -8,68 +9,54 @@ namespace PizzaDeliveryApi.Controllers
     [Route("api/[controller]")]
     public class OrderProductController : ControllerBase
     {
-        public OrderProductController()
+        private readonly IOrderProductRepository _orderProducts;
+
+        public OrderProductController(IOrderProductRepository orderProducts)
         {
+            _orderProducts = orderProducts; 
         }
 
-        ///// <summary>
-        ///// Return all pizza instanses
-        ///// </summary>
-        ///// <returns></returns>
-        //// GET all action
-        //[HttpGet]
-        //public ActionResult<List<OrderProduct>> GetAll() =>
-        //    DrinkService.GetAll();
+        /// <summary>
+        /// Return all customer instanses
+        /// </summary>
+        /// <returns></returns>
+        // GET all action
+        [HttpGet]
+        public async Task<ActionResult<List<Customer>>> GetAll()
+        {
+            return Ok(await _orderProducts.GetAllOrderProductsAsync());
+        }
 
-        //// GET by Id action
-        //[HttpGet("{id}")]
-        //public ActionResult<OrderProduct> Get(int id)
-        //{
-        //    var drink = DrinkService.Get(id);
 
-        //    if (drink == null)
-        //        return NotFound();
+        // GET by Id action
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Customer>> Get(int id)
+        {
+            return Ok(await _orderProducts.GetOrderProductByIdAsync(id));
+        }
 
-        //    return drink;
-        //}
+        // POST action
+        [HttpPost]
+        public async Task<IActionResult> Create(OrderProduct orderProduct)
+        {
+            return Ok(await _orderProducts.CreateOrderProductAsync(orderProduct));
+        }
 
-        //// POST action
-        //[HttpPost]
-        //public IActionResult Create(OrderProduct drink)
-        //{
-        //    DrinkService.Add(drink);
-        //    return CreatedAtAction(nameof(Create), new { id = drink.Id }, drink);
-        //}
+        // PUT action
+        [HttpPut]
+        public async Task<IActionResult> Edit(int id, OrderProduct orderProduct)
+        {
+            return Ok(await _orderProducts.EditOrderProductByIdAsync(id, orderProduct));
 
-        //// PUT action
-        //[HttpPut("{id}")]
-        //public IActionResult Update(int id, OrderProduct drink)
-        //{
-        //    if (id != drink.Id)
-        //        return BadRequest();
+        }
 
-        //    var existingDrink = DrinkService.Get(id);
-        //    if (existingDrink is null)
-        //        return NotFound();
-
-        //    DrinkService.Update(drink);
-
-        //    return NoContent();
-        //}
-
-        //// DELETE action
-        //[HttpDelete("{id}")]
-        //public IActionResult Delete(int id)
-        //{
-        //    var drink = DrinkService.Get(id);
-
-        //    if (drink is null)
-        //        return NotFound();
-
-        //    DrinkService.Delete(id);
-
-        //    return NoContent();
-        //}
+        // DELETE action
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _orderProducts.DeleteOrderProductByIdAsync(id);
+            return NoContent();
+        }
 
     }
 }
