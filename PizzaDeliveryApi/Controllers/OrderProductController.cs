@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PizzaDeliveryApi.Data.DtoModels;
 using PizzaDeliveryApi.Data.Interfaces;
 using PizzaDeliveryApi.Data.Models;
 using PizzaDeliveryApi.Services;
+using PizzaDeliveryApi.Services.Interfaces;
 
 namespace PizzaDeliveryApi.Controllers
 {
@@ -9,11 +11,11 @@ namespace PizzaDeliveryApi.Controllers
     [Route("api/[controller]")]
     public class OrderProductController : ControllerBase
     {
-        private readonly IOrderProductRepository _orderProducts;
+        private readonly IOrderProductService _services;
 
-        public OrderProductController(IOrderProductRepository orderProducts)
+        public OrderProductController(IOrderProductService services)
         {
-            _orderProducts = orderProducts; 
+            _services = services; 
         }
 
         /// <summary>
@@ -24,7 +26,7 @@ namespace PizzaDeliveryApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Customer>>> GetAll()
         {
-            return Ok(await _orderProducts.GetAllOrderProductsAsync());
+            return Ok(await _services.GetAllOrderProductsAsync());
         }
 
 
@@ -32,21 +34,21 @@ namespace PizzaDeliveryApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> Get(int id)
         {
-            return Ok(await _orderProducts.GetOrderProductByIdAsync(id));
+            return Ok(await _services.GetOrderProductByIdAsync(id));
         }
 
         // POST action
         [HttpPost]
-        public async Task<IActionResult> Create(OrderProduct orderProduct)
+        public async Task<IActionResult> Create(OrderProductDTO orderProductDto)
         {
-            return Ok(await _orderProducts.CreateOrderProductAsync(orderProduct));
+            return Ok(await _services.CreateOrderProductAsync(orderProductDto));
         }
 
         // PUT action
         [HttpPut]
-        public async Task<IActionResult> Edit(int id, OrderProduct orderProduct)
+        public async Task<IActionResult> Edit(int id, OrderProductDTO orderProductDto)
         {
-            return Ok(await _orderProducts.EditOrderProductByIdAsync(id, orderProduct));
+            return Ok(await _services.EditOrderProductByIdAsync(id, orderProductDto));
 
         }
 
@@ -54,7 +56,7 @@ namespace PizzaDeliveryApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _orderProducts.DeleteOrderProductByIdAsync(id);
+            await _services.DeleteOrderProductByIdAsync(id);
             return NoContent();
         }
 

@@ -41,15 +41,10 @@ namespace PizzaDeliveryApi.Data.Repositories
             return orderProduct;
         }
 
-        public async Task DeleteOrderProductByIdAsync(int id)
-        {
-            var orderProduct = await _context.OrderProducts.FindAsync(id);
-
-            if (orderProduct != null)
-            {
+        public async Task DeleteOrderProductByIdAsync(OrderProduct orderProduct)
+        { 
                 _context.OrderProducts.Remove(orderProduct);
                 await _context.SaveChangesAsync();
-            }
         }
     }
 }

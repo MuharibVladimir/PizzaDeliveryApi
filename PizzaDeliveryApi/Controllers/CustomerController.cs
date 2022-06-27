@@ -12,10 +12,11 @@ namespace PizzaDeliveryApi.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerRepository _customers;
+        private readonly ILogger<CustomerController> _logger;
 
-        public CustomerController(ICustomerRepository customers)
+        public CustomerController(ICustomerRepository customers, ILogger<CustomerController> logger)
         {
-            _customers = customers;
+            _customers = customers; 
         }
 
         /// <summary>
