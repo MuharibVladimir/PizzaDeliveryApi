@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PizzaDeliveryApi.Data;
 using PizzaDeliveryApi.Data.DTOModels;
 using PizzaDeliveryApi.Data.Interfaces;
@@ -13,12 +14,14 @@ namespace PizzaDeliveryApi.Services
         private readonly IOrderRepository _orders;
         private readonly IMapper _mapper;
         private readonly ILogger<IOrderService> _logger; 
+        private readonly DataContext _context;
 
-        public OrderService(IOrderRepository orders, IMapper mapper, ILogger<IOrderService> _logger)
+        public OrderService(IOrderRepository orders, IMapper mapper, ILogger<IOrderService> logger, DataContext context)
         {
             _orders = orders;    
             _mapper = mapper;
-            _logger = _logger;  
+            _logger = logger;  
+            _context = context;
         }
 
         public async Task<Order> MakeOrderAsync(OrderDTO orderDto)
@@ -69,6 +72,10 @@ namespace PizzaDeliveryApi.Services
             return order;
         }
 
+        public async Task<List<Order>> GetOrdersByStatusNameAsync(string status)
+        {
+            return await _context.Orders.Where(o => o.Status.Name == status).ToListAsync();
+        }
     }
 }
 

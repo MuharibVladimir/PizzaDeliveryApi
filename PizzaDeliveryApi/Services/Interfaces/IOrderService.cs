@@ -13,5 +13,7 @@ namespace PizzaDeliveryApi.Services.Interfaces
 
         Task<Order> EditOrderByIdAsync(int id, OrderDTO order);
         Task DeleteOrderByIdAsync(int id);
+
+        Task<List<Order>> GetOrdersByStatusNameAsync(string status);
     }
 }

@@ -81,5 +81,11 @@ namespace PizzaDeliveryApi.Controllers
             await _services.DeleteOrderByIdAsync(id);
             return NoContent();
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Order>>> GetOrdersByStatusNameAsync(string status)
+        {
+            return Ok(await _services.GetOrdersByStatusNameAsync(status));
+        }
     }
 }
