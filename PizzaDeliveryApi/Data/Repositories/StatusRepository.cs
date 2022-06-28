@@ -7,16 +7,20 @@ namespace PizzaDeliveryApi.Data.Repositories
     public class StatusRepository: IStatusRepository
     {
         private readonly DataContext _context;
+        private readonly ILogger<IStatusRepository> _logger;
 
-        public StatusRepository(DataContext context)
+        public StatusRepository(DataContext context, ILogger<IStatusRepository> logger)
         {
             _context = context;
+            _logger = logger;   
         }
 
         public async Task<Status> CreateStatusAsync(Status status)
         {
             _context.Statuses.Add(status);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Status was successfully added");
 
             return status;
         }
@@ -30,6 +34,11 @@ namespace PizzaDeliveryApi.Data.Repositories
         {
             var status = await _context.Statuses.FirstOrDefaultAsync(status => status.Id == id);
 
+            if (status == null)
+            {
+                _logger.LogError($"Status with id = {id} is not found");
+            }
+
             return status;
         }
 
@@ -37,6 +46,8 @@ namespace PizzaDeliveryApi.Data.Repositories
         {
             _context.Entry(status).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Status was successfully updated");
 
             return status;
         }
@@ -49,6 +60,12 @@ namespace PizzaDeliveryApi.Data.Repositories
             {
                 _context.Statuses.Remove(status);
                 await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Status was successfully deleted");
+            }
+            else
+            {
+                _logger.LogError($"Status with id = {id} is not found");
             }
         }
     }

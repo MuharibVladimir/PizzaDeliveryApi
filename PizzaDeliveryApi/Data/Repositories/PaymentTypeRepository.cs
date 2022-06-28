@@ -7,16 +7,20 @@ namespace PizzaDeliveryApi.Data.Repositories
     public class PaymentTypeRepository: IPaymentTypeRepository
     {
         private readonly DataContext _context;
+        private readonly ILogger<IPaymentTypeRepository> _logger;
 
-        public PaymentTypeRepository(DataContext context)
+        public PaymentTypeRepository(DataContext context, ILogger<IPaymentTypeRepository> logger)
         {
             _context = context;
+            _logger = logger;   
         }
 
         public async Task<PaymentType> CreatePaymentTypeAsync(PaymentType paymentType)
         {
             _context.PaymentTypes.Add(paymentType);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation("PaymentType was successfully added");
 
             return paymentType;
         }
@@ -30,6 +34,11 @@ namespace PizzaDeliveryApi.Data.Repositories
         {
             var paymentType = await _context.PaymentTypes.FirstOrDefaultAsync(paymentType => paymentType.Id == id);
 
+            if (paymentType == null)
+            {
+                _logger.LogError($"PaymentType with id = {id} is not found");
+            }
+
             return paymentType;
         }
 
@@ -37,6 +46,8 @@ namespace PizzaDeliveryApi.Data.Repositories
         {
             _context.Entry(paymentType).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation("PaymentType was successfully updated");
 
             return paymentType;
         }
@@ -49,6 +60,12 @@ namespace PizzaDeliveryApi.Data.Repositories
             {
                 _context.PaymentTypes.Remove(paymentType);
                 await _context.SaveChangesAsync();
+
+                _logger.LogInformation("PaymentType was successfully deleted");
+            }
+            else
+            {
+                _logger.LogError($"PaymentType with id = {id} is not found");
             }
         }
     }

@@ -11,13 +11,13 @@ namespace PizzaDeliveryApi.Services
     {
         private readonly IOrderProductRepository _orderProducts;
         private readonly IMapper _mapper;
-        private readonly DataContext _context;
+        private readonly ILogger<IOrderProductService> _logger;
 
-        public OrderProductService(IOrderProductRepository orderProducts, IMapper mapper, DataContext context)
+        public OrderProductService(IOrderProductRepository orderProducts, IMapper mapper, ILogger<IOrderProductService> logger)
         {
             _orderProducts = orderProducts; 
-            _mapper = mapper;   
-            _context = context; 
+            _mapper = mapper;
+            _logger = logger; 
         }
 
         public async Task DeleteOrderProductByIdAsync(int id)
@@ -27,6 +27,10 @@ namespace PizzaDeliveryApi.Services
             if (existingOrderProduct != null)
             {
                 await _orderProducts.DeleteOrderProductByIdAsync(existingOrderProduct);
+            }
+            else
+            {
+                _logger.LogError($"There is no ordered product with defined id = {id}");
             }
         }
 
@@ -45,7 +49,8 @@ namespace PizzaDeliveryApi.Services
             var orderProduct = _mapper.Map<OrderProduct>(orderProductDto);
 
             await _orderProducts.CreateOrderProductAsync(orderProduct);
-            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("New ordered product was successfully created");
 
             return orderProduct;
         }
@@ -53,7 +58,8 @@ namespace PizzaDeliveryApi.Services
         public async Task<OrderProduct> EditOrderProductByIdAsync(int id, OrderProductDTO orderProductDto)
         {
             var orderProduct = await _orderProducts.EditOrderProductByIdAsync(id, _mapper.Map<OrderProduct>(orderProductDto));
-            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("New ordered product was successfully updated");
 
             return orderProduct;
         }

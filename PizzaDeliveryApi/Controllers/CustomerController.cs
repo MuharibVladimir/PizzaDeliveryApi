@@ -17,6 +17,7 @@ namespace PizzaDeliveryApi.Controllers
         public CustomerController(ICustomerRepository customers, ILogger<CustomerController> logger)
         {
             _customers = customers; 
+            _logger = logger;
         }
 
         /// <summary>

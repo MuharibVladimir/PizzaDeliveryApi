@@ -12,10 +12,12 @@ namespace PizzaDeliveryApi.Controllers
     public class OrderProductController : ControllerBase
     {
         private readonly IOrderProductService _services;
+        private readonly ILogger<OrderProductController> _logger;
 
-        public OrderProductController(IOrderProductService services)
+        public OrderProductController(IOrderProductService services, ILogger<OrderProductController> logger)
         {
             _services = services; 
+            _logger = logger;   
         }
 
         /// <summary>
@@ -48,6 +50,11 @@ namespace PizzaDeliveryApi.Controllers
         [HttpPut]
         public async Task<IActionResult> Edit(int id, OrderProductDTO orderProductDto)
         {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("You write incorrect data");
+            }
+
             return Ok(await _services.EditOrderProductByIdAsync(id, orderProductDto));
 
         }

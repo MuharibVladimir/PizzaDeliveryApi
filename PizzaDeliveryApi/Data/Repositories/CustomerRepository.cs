@@ -8,16 +8,20 @@ namespace PizzaDeliveryApi.Data.Repositories
     public class CustomerRepository : ICustomerRepository
     {
         private readonly DataContext _context;
+        private readonly ILogger<CustomerRepository> _logger;   
 
-        public CustomerRepository(DataContext context)
+        public CustomerRepository(DataContext context, ILogger<CustomerRepository> logger)
         {
            _context = context;
+            _logger = logger;   
         } 
 
         public async Task<Customer> CreateCustomerAsync(Customer customer)
         {
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation("The new customer is successfully added");
 
             return customer;
         }
