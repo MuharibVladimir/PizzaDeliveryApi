@@ -12,13 +12,13 @@ namespace PizzaDeliveryApi.Services
     {
         private readonly IAddressRepository _addresses;
         private readonly IMapper _mapper;
-        private readonly DataContext _context;
+        private readonly ILogger<IAddressService> _logger;
 
-        public AddressService(IAddressRepository addresses, IMapper mapper, DataContext context)
+        public AddressService(IAddressRepository addresses, IMapper mapper, ILogger<IAddressService> logger)
         {
             _addresses = addresses;
             _mapper = mapper;   
-            _context = context; 
+            _logger = logger;    
         }
 
         public async Task DeleteAddressByIdAsync(int id)
@@ -28,7 +28,11 @@ namespace PizzaDeliveryApi.Services
             if (existingAddress != null)
             {
                 await _addresses.DeleteAddressByIdAsync(existingAddress);
-            }   
+            }
+            else
+            {
+                _logger.LogError($"There is no address with defined id = {id}");
+            }
         }
 
         public async Task<List<Address>> GetAllAddressesAsync()
@@ -46,7 +50,8 @@ namespace PizzaDeliveryApi.Services
             var address = _mapper.Map<Address>(addressDto);
 
             await _addresses.CreateAddressAsync(address);
-            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("New address was successfully created");
 
             return address;
         }
@@ -54,7 +59,8 @@ namespace PizzaDeliveryApi.Services
         public async Task<Address> EditAddressByIdAsync(int id, AddressDTO addressDto)
         {
             var address = await _addresses.EditAddressByIdAsync(id, _mapper.Map<Address>(addressDto));
-            await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"The address with id = {id} was successfully updated");
 
             return address;
         }

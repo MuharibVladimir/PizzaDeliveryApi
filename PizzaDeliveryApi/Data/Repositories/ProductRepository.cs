@@ -7,16 +7,20 @@ namespace PizzaDeliveryApi.Data.Repositories
     public class ProductRepository: IProductRepository
     {
         private readonly DataContext _context;
+        private readonly ILogger<IProductRepository> _logger;
 
-        public ProductRepository(DataContext context)
+        public ProductRepository(DataContext context, ILogger<IProductRepository> logger)
         {
             _context = context;
+            _logger = logger;   
         }
 
         public async Task<Product> CreateProductAsync(Product product)
         {
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Product was successfully added");
 
             return product;
         }
@@ -30,6 +34,11 @@ namespace PizzaDeliveryApi.Data.Repositories
         {
             var product = await _context.Products.FirstOrDefaultAsync(product => product.Id == id);
 
+            if (product == null)
+            {
+                _logger.LogError($"Product with id = {id} is not found");
+            }
+
             return product;
         }
 
@@ -37,6 +46,8 @@ namespace PizzaDeliveryApi.Data.Repositories
         {
             _context.Entry(product).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Product was successfully updated");
 
             return product;
         }
@@ -49,6 +60,12 @@ namespace PizzaDeliveryApi.Data.Repositories
             {
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Product was successfully deleted");
+            }
+            else
+            {
+                _logger.LogError($"Product with id = {id} is not found");
             }
         }
     }

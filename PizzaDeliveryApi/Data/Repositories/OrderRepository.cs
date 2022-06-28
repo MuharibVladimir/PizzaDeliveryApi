@@ -7,10 +7,12 @@ namespace PizzaDeliveryApi.Data.Repositories
     public class OrderRepository: IOrderRepository
     {
         private readonly DataContext _context;
+        private readonly ILogger<IOrderRepository> _logger;
 
-        public OrderRepository(DataContext context)
+        public OrderRepository(DataContext context, ILogger<IOrderRepository> logger)
         {
             _context = context;
+            _logger = logger;   
         }
 
         public async Task<Order> CreateOrderAsync(Order order)
@@ -30,6 +32,11 @@ namespace PizzaDeliveryApi.Data.Repositories
         {
             var order = await _context.Orders.FirstOrDefaultAsync(order => order.Id == id);
 
+            if (order == null)
+            {
+                _logger.LogError($"The order with id = {id} is not found");
+            }
+
             return order;
         }
 
@@ -43,8 +50,10 @@ namespace PizzaDeliveryApi.Data.Repositories
 
         public async Task DeleteOrderByIdAsync(Order order)
         {
-                _context.Orders.Remove(order);
-                await _context.SaveChangesAsync();
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Order was successfully deleted");
         }
     }
 }

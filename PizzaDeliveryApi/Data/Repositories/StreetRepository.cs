@@ -7,16 +7,20 @@ namespace PizzaDeliveryApi.Data.Repositories
     public class StreetRepository: IStreetRepository
     {
         private readonly DataContext _context;
+        private readonly ILogger<IStreetRepository> _logger;
 
-        public StreetRepository(DataContext context)
+        public StreetRepository(DataContext context, ILogger<IStreetRepository> logger)
         {
             _context = context;
+            _logger = logger;   
         }
 
         public async Task<Street> CreateStreetAsync(Street street)
         {
             _context.Streets.Add(street);
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Street was successfully added");
 
             return street;
         }
@@ -30,6 +34,11 @@ namespace PizzaDeliveryApi.Data.Repositories
         {
             var street = await _context.Streets.FirstOrDefaultAsync(street => street.Id == id);
 
+            if (street == null)
+            {
+                _logger.LogError($"Street with id = {id} is not found");
+            }
+
             return street;
         }
 
@@ -37,6 +46,8 @@ namespace PizzaDeliveryApi.Data.Repositories
         {
             _context.Entry(street).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Street was successfully updated");
 
             return street;
         }
@@ -49,6 +60,12 @@ namespace PizzaDeliveryApi.Data.Repositories
             {
                 _context.Streets.Remove(street);
                 await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Street was successfully deleted");
+            }
+            else
+            {
+                _logger.LogError($"Street with id = {id} is not found");
             }
         }
     }

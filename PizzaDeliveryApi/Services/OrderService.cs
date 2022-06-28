@@ -12,13 +12,13 @@ namespace PizzaDeliveryApi.Services
     {
         private readonly IOrderRepository _orders;
         private readonly IMapper _mapper;
-        private readonly DataContext _context;
+        private readonly ILogger<IOrderService> _logger; 
 
-        public OrderService(IOrderRepository orders, DataContext context, IMapper mapper)
+        public OrderService(IOrderRepository orders, IMapper mapper, ILogger<IOrderService> _logger)
         {
             _orders = orders;    
-            _context = context;
             _mapper = mapper;
+            _logger = _logger;  
         }
 
         public async Task<Order> MakeOrderAsync(OrderDTO orderDto)
@@ -26,7 +26,8 @@ namespace PizzaDeliveryApi.Services
             var order = _mapper.Map<Order>(orderDto);   
        
             await _orders.CreateOrderAsync(order);
-            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("New order was successfully created");
 
             return order;   
         }
@@ -35,13 +36,17 @@ namespace PizzaDeliveryApi.Services
         {
             var existingOrder = await _orders.GetOrderByIdAsync(id);
 
-            if ((existingOrder != null) && (existingOrder.Status.Name == "delivered"))
+            if (existingOrder == null)
+            {
+                _logger.LogError($"There is no order with defined id = {id}");
+            }
+            else if ((existingOrder.Status.Name == "delivered") || (existingOrder.Status.Name == "cancelled"))
             {
                 await _orders.DeleteOrderByIdAsync(existingOrder);
-            }      
+            }
             else
             {
-                throw new Exception("Order is not delivered yet");
+                _logger.LogError($"The order with defined id = {id} is in progress now, you can't delete it");
             }
         }
 
@@ -58,7 +63,8 @@ namespace PizzaDeliveryApi.Services
         public async Task<Order> EditOrderByIdAsync(int id, OrderDTO orderDto)
         {
             var order = await _orders.EditOrderByIdAsync(id, _mapper.Map<Order>(orderDto));
-            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Order was successfully updated");
 
             return order;
         }

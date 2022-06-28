@@ -6,11 +6,13 @@ namespace PizzaDeliveryApi.Data.Repositories
 {
     public class AddressRepository: IAddressRepository  
     {
+        private readonly ILogger<AddressRepository> _logger;
         private readonly DataContext _context;
 
-        public AddressRepository(DataContext context)
+        public AddressRepository(DataContext context, ILogger<AddressRepository> logger)
         {
             _context = context;
+            _logger = logger;   
         }
 
         public async Task<Address> CreateAddressAsync(Address address)
@@ -30,6 +32,11 @@ namespace PizzaDeliveryApi.Data.Repositories
         {
             var address = await _context.Addresses.FirstOrDefaultAsync(address => address.Id == id);
 
+            if (address == null)
+            {
+                _logger.LogError($"The address with id = {id} is not found");
+            }
+
             return address;
         }
 
@@ -46,6 +53,8 @@ namespace PizzaDeliveryApi.Data.Repositories
             {
                 _context.Addresses.Remove(address);
                 await _context.SaveChangesAsync();
+
+                _logger.LogInformation($"The address was successfully deleted");
             }
         }
     }
