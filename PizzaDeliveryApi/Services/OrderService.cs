@@ -69,6 +69,10 @@ namespace PizzaDeliveryApi.Services
             return order;
         }
 
+        //public async Task<List<Order>> GetOrdersByStatus (Status status)
+        //{
+
+        //} 
     }
 }
 
