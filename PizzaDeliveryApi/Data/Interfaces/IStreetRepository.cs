@@ -2,7 +2,7 @@
 
 namespace PizzaDeliveryApi.Data.Interfaces
 {
-    public interface IStreetRepository
+    public interface IStreetRepository/*: IEntityRepository<Street>*/
     {
         Task<List<Street>> GetAllStreetsAsync();
         Task<Street> GetStreetByIdAsync(int id);
