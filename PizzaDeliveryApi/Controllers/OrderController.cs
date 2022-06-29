@@ -82,10 +82,28 @@ namespace PizzaDeliveryApi.Controllers
             return NoContent();
         }
 
-        [HttpGet]
+        [HttpGet("{status:alpha}")]
         public async Task<ActionResult<List<Order>>> GetOrdersByStatusNameAsync(string status)
         {
             return Ok(await _services.GetOrdersByStatusNameAsync(status));
+        }
+
+        [HttpGet("price")]
+        public async Task<ActionResult<List<Order>>> GetOrdersInPriceRangeIdAsync(decimal upperBoundary, decimal lowBoundary)
+        {
+            return Ok(await _services.GetOrdersInPriceRangeIdAsync(upperBoundary, lowBoundary));
+        }
+
+        [HttpGet("customerId")]
+        public async Task<ActionResult<List<Order>>> GetOrdersByCustomerIdAsync(int customerId)
+        {
+            return Ok(await _services.GetOrdersByCustomerIdAsync(customerId));
+        }
+
+        [HttpGet("street")]
+        public async Task<ActionResult<List<Order>>> GetOrdersByStreetAsync(string street)
+        {
+            return Ok(await _services.GetOrdersByStreetAsync(street));
         }
     }
 }
